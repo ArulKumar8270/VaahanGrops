@@ -1,4 +1,6 @@
 import React from "react";
+import Entries from "./views/dashboard/Reports/Sales/Entries";
+import ViewEntries from "./views/dashboard/Reports/Sales/ViewEntries";
 const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
 const AddCompany = React.lazy(() => import("./views/dashboard/AddCompany"));
 const Manufacturer = React.lazy(
@@ -38,7 +40,8 @@ const routes = [
     name: "SubDistributorSale",
     element: subDistributerSale,
   },
-  // { path: "/dealer", name: "Manufacturer", element: dealer },
+  { path: "/Entries", name: "Entries", element: Entries },
+  { path: "/ViewEntries/:id", name: "ViewEntries", element: ViewEntries },
   // { path: "/newEntry", name: "NewEntry", element: NewEntry },
 ];
 

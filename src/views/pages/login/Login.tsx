@@ -37,9 +37,11 @@ const Login = () => {
         localStorage.setItem("token", result?.["data"]?.data?.access_token);
         localStorage.setItem("name", result?.["data"]?.data?.user?.name);
         localStorage.setItem("role_id", result?.["data"]?.data?.user?.role_id);
+        localStorage.setItem("userId", result?.["data"]?.data?.user?.id);
         let userinfo: any = {
           token: result?.["data"]?.data?.access_token,
           name: result?.["data"]?.data?.user?.name,
+          userId: result?.["data"]?.data?.user?.id,
           role_id: result?.["data"]?.data?.user?.role_id,
         };
         dispatch(login(userinfo));

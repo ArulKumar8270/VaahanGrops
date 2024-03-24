@@ -24,20 +24,26 @@ export const salesApi = createApi({
       query: () => `/distributorUser`,
     }),
     getSubDistributer: builder.query<any[], void>({
-      query: () => `/subDistributorUser`,
+      query: (params) => `/subDistributorUser/?${params}`,
     }),
     getDealerUser: builder.query<any[], void>({
-      query: () => `/dealerUser`,
+      query: (params) => `/dealerUser/?${params}`,
     }),
     getDisbutersSale: builder.query<any[], void>({
-      query: () => `/distributor`,
+      query: (params) => `/distributor/?${params}`,
     }),
     getSubDistributerSale: builder.query<any[], void>({
-      query: () => `/subdistributor`,
+      query: (params) => `/subdistributor/?${params}`,
     }),
-    // getDealerUserSale: builder.query<any[], void>({
-    //   query: () => `/dealerUser`,
-    // }),
+    getDealerSale: builder.query<any[], void>({
+      query: (params) => `/dealer/?${params}`,
+    }),
+    getRegistrationsSaleByUser: builder.query<any[], void>({
+      query: (params) => `/registrations/?${params}`,
+    }),
+    getRegistrationsSaleById: builder.query<any[], void>({
+      query: (params) => `/registrations/${params}`,
+    }),
     createDistributerSale: builder.mutation({
       query: (body: any) => ({
         url: `/distributor`,
@@ -48,6 +54,13 @@ export const salesApi = createApi({
     createSubDistributerSale: builder.mutation({
       query: (body: any) => ({
         url: `/subdistributor`,
+        method: "POST",
+        body,
+      }),
+    }),
+    createDealerStock: builder.mutation({
+      query: (body: any) => ({
+        url: `/dealer`,
         method: "POST",
         body,
       }),
@@ -72,5 +85,9 @@ export const {
   useCreateSubDistributerSaleMutation,
   useGetDisbutersSaleQuery,
   useGetSubDistributerSaleQuery,
+  useGetRegistrationsSaleByUserQuery,
+  useGetDealerSaleQuery,
+  useCreateDealerStockMutation,
+  useGetRegistrationsSaleByIdQuery
 } = salesApi;
 export const { endpoints } = salesApi;

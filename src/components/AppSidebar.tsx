@@ -35,13 +35,15 @@ const AppSidebar = () => {
         color: "info",
         text: "NEW",
       },
-      display: userInfo?.role_id === "1" ? true : false,
+      display:
+        userInfo?.role_id !== "4" && userInfo?.role_id !== "3" ? true : false,
     },
     {
       component: CNavGroup,
       name: "Profiles",
       to: "/manufacturer",
-      display: userInfo?.role_id === "1" ? true : false,
+      display:
+        userInfo?.role_id !== "4" && userInfo?.role_id !== "3" ? true : false,
       items: [
         {
           component: CNavItem,
@@ -59,13 +61,21 @@ const AppSidebar = () => {
           component: CNavItem,
           name: "Sub Distributor",
           to: "/subDistributor",
-          display: userInfo?.role_id === "1" ? true : false,
+          display:
+            userInfo?.role_id === "1" || userInfo?.role_id === "2"
+              ? true
+              : false,
         },
         {
           component: CNavItem,
           name: "Dealer",
           to: "/dealer",
-          display: userInfo?.role_id === "1" ? true : false,
+          display:
+            userInfo?.role_id === "1" ||
+            userInfo?.role_id === "2" ||
+            userInfo?.role_id === "3"
+              ? true
+              : false,
         },
       ],
     },
@@ -73,8 +83,14 @@ const AppSidebar = () => {
       component: CNavGroup,
       name: "Sales",
       to: "/Sales",
-      display: userInfo?.role_id === "1" ? true : false,
+      display: true,
       items: [
+        {
+          component: CNavItem,
+          name: "Entries",
+          to: "/Entries",
+          display: true,
+        },
         {
           component: CNavItem,
           name: "Distributor",
@@ -85,13 +101,19 @@ const AppSidebar = () => {
           component: CNavItem,
           name: "Sub Distributor",
           to: "/subDistributorSale",
-          display: userInfo?.role_id === "1" ? true : false,
+          display:
+            userInfo?.role_id === "1" || userInfo?.role_id === "2"
+              ? true
+              : false,
         },
         {
           component: CNavItem,
           name: "Dealer",
-          to: "/subDistributorSale",
-          display: userInfo?.role_id === "1" ? true : false,
+          to: "/Entries",
+          display:
+            userInfo?.role_id === "1" || userInfo?.role_id === "2"
+              ? true
+              : false,
         },
       ],
     },

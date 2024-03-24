@@ -2,8 +2,12 @@ import { CCard } from "@coreui/react";
 import React from "react";
 import Table from "../../../../components/Table";
 import { useGetDisbutersQuery } from "../../../../Services/sales";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../Store";
 
 const Distributor = () => {
+  const userInfo = useSelector((state: RootState) => state.loginState.userInfo);
+
   const {
     data: distributerData,
     error: distributerError,
@@ -11,7 +15,14 @@ const Distributor = () => {
     refetch: distributerRefetch,
   } = useGetDisbutersQuery();
 
-  console.log(distributerData, "manifactDatamanifactDatamanifactData");
+  React.useEffect(() => {
+    distributerRefetch();
+  }, []);
+  console.log(
+    distributerData,
+    "manifactDatamanifactDatamanifactData",
+    userInfo
+  );
 
   const columns = [
     {
@@ -30,13 +41,13 @@ const Distributor = () => {
       key: "user_name",
     },
     {
-      key: "manufacturer_id",
+      key: "manufacturer_name",
     },
   ];
   return (
     <CCard className="mb-4 pb-3 p-3">
       {distributerData && (
-        <Table column={columns} data={distributerData?.["data"]?.data} />
+        <Table column={columns} data={distributerData?.["data"]?.data} TableName={"Distributer"}/>
       )}
     </CCard>
   );

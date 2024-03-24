@@ -1,20 +1,35 @@
-import { CCard } from "@coreui/react";
+import { CButton, CCard } from "@coreui/react";
 import React from "react";
 import Table from "../../../../components/Table";
 import {
   useGetDisbutersQuery,
   useGetSubDistributerQuery,
 } from "../../../../Services/sales";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../Store";
 
 const SubDistributor = () => {
+  const userInfo = useSelector((state: RootState) => state.loginState.userInfo);
+  let urlString: any = `distributer_name=${userInfo?.userId}`;
+  let urlStringAdmin: any = `distributer_name=`;
+  let finalQUery = userInfo?.role_id === "2" ? urlString : urlStringAdmin;
   const {
     data: subDistributerData,
     error: subDistributerError,
     isLoading: subDistributerLoading,
     refetch: subDistributerRefetcg,
-  } = useGetSubDistributerQuery();
+  } = useGetSubDistributerQuery(finalQUery);
 
-  console.log(subDistributerData, "manifactDatamanifactDatamanifactData");
+  React.useEffect(() => {
+    subDistributerRefetcg();
+  }, []);
+
+  console.log(
+    subDistributerData,
+    urlString,
+    "manifactDatamanifactDatamanifactData",
+    userInfo
+  );
 
   const columns = [
     {
@@ -30,22 +45,22 @@ const SubDistributor = () => {
       key: "address",
     },
     {
-      key: "quantity",
+      key: "manufacturer_name",
     },
     {
-      key: "manufacturer_id",
-    },
-    {
-      key: "distributor_id",
-    },
-    {
-      key: "product_name",
+      key: "distributor_name",
     },
   ];
+
   return (
     <CCard className="mb-4 pb-3 p-3">
       {subDistributerData && (
-        <Table column={columns} data={subDistributerData?.["data"]?.data} />
+        <Table
+          TableName={"Sub Distributor"}
+          column={columns}
+          data={subDistributerData?.["data"]?.data}
+          scopedColumns={null}
+        />
       )}
     </CCard>
   );

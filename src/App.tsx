@@ -25,16 +25,17 @@ function App() {
   let token: any = localStorage.getItem("token");
   let name: any = localStorage.getItem("name");
   let role_id: any = localStorage.getItem("role_id");
+  let userId: any = localStorage.getItem("userId");
   React.useEffect(() => {
     if (token) {
       let userinfo: any = {
         token: token,
         name: name,
         role_id: role_id,
+        userId: userId,
       };
       dispatch(login(userinfo));
     } else {
-      
     }
   }, [token]);
 

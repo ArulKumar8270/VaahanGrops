@@ -186,12 +186,12 @@ button.btn.btn-outline-primary {
 .logo-text {
   text-align: center;
   font-size: 24px;
-  color: #6d6be7;
+  color: black;
   margin: 0;
   font-weight: 600;
-  background: -webkit-linear-gradient(#6d6be7 50%, #f00 62%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  // background: -webkit-linear-gradient(#6d6be7 50%, #f00 62%);
+  // -webkit-background-clip: text;
+  // -webkit-text-fill-color: transparent;
 }
 .countCard {
   background: linear-gradient(45deg, #6d6be730 46%, #6d6be778 41%);

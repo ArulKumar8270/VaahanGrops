@@ -5,16 +5,31 @@ import {
   useGetDisbutersQuery,
   useGetDisbutersSaleQuery,
 } from "../../../../Services/sales";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../Store";
 
 const DistributorSale = () => {
+  const userInfo = useSelector((state: RootState) => state.loginState.userInfo);
+  let urlString: any = `dealerName=${userInfo?.name}`;
+  let urlStringAdmin: any = `dealerName=`;
+  let finalQUery = userInfo?.role_id === "2" ? urlString : urlStringAdmin;
+
   const {
     data: distributerSaleData,
     error: distributerError,
     isLoading: distributerLoading,
     refetch: distributerRefetch,
-  } = useGetDisbutersSaleQuery();
+  } = useGetDisbutersSaleQuery(finalQUery);
 
-  console.log(distributerSaleData, "manifactDatamanifactDatamanifactData");
+  console.log(
+    distributerSaleData,
+    "manifactDatamanifactDatamanifactData",
+    userInfo
+  );
+
+  React.useEffect(() => {
+    distributerRefetch();
+  }, []);
 
   const columns = [
     {
@@ -34,9 +49,6 @@ const DistributorSale = () => {
     },
     {
       key: "yellow50mm",
-    },
-    {
-      key: "yellow80mm",
     },
     {
       key: "redReflector80mm",
@@ -63,7 +75,7 @@ const DistributorSale = () => {
   return (
     <CCard className="mb-4 pb-3 p-3">
       {distributerSaleData && (
-        <Table column={columns} data={distributerSaleData?.["data"]?.data} />
+        <Table column={columns} data={distributerSaleData?.["data"]?.data} TableName={"Distributer Sale"}/>
       )}
     </CCard>
   );

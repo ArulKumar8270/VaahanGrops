@@ -13,11 +13,13 @@ const DefaultLayout = () => {
   let token: any = localStorage.getItem("token");
   let name: any = localStorage.getItem("name");
   let role_id: any = localStorage.getItem("role_id");
+  let userId: any = localStorage.getItem("userId");
   React.useEffect(() => {
     if (userInfo) {
       let userinfo: any = {
         token: token,
         name: name,
+        userId: userId,
         role_id: role_id,
       };
       dispatch(login(userinfo));

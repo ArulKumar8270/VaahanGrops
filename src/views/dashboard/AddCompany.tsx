@@ -15,6 +15,8 @@ import {
   useCreateDistributerMutation,
   useCreateManufacturerMutation,
   useCreateSubDistributerMutation,
+  useGetByDistributerUserNameQuery,
+  useGetBySubDistributerUserNameQuery,
   useRegisterUserMutation,
 } from "../../Services/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,21 +31,13 @@ import {
 
 const AddCompany = () => {
   const userInfo = useSelector((state: RootState) => state.loginState.userInfo);
-
-  const {
-    data: manifactData,
-    error: manifactError,
-    isLoading: manifactLoading,
-    refetch,
-  } = useGetManufacturerQuery();
-
-  console.log(manifactData, "manifactData2134");
   const {
     control,
     handleSubmit,
     formState: { errors },
     watch,
   } = useForm();
+
   const formData = watch();
   const [createManufact] = useCreateManufacturerMutation();
   const [createDistributer] = useCreateDistributerMutation();
@@ -53,21 +47,83 @@ const AddCompany = () => {
   const navigate = useNavigate();
   console.log(formData, "324532");
 
+  const {
+    data: byDistributerUser,
+    error: byDistributerUserError,
+    refetch: byDistributerUserRefetch,
+  } = useGetByDistributerUserNameQuery(userInfo?.name);
+
+  console.log(
+    userInfo,
+    "userInfo34523",
+    byDistributerUser?.["data"]?.data?.[0]
+  );
+
+  const {
+    data: manifactData,
+    error: manifactError,
+    isLoading: manifactLoading,
+    refetch,
+  } = useGetManufacturerQuery();
+
+  const {
+    data: distributerUserData,
+    error: distributerUserError,
+    isLoading: distributerLoading,
+    refetch: distributerUserRefetch,
+  } = useGetDisbutersQuery();
+
+  const {
+    data: subDistributerData,
+    error: subDistributerError,
+    isLoading: subDistributerLoading,
+    refetch: subDistributerRefetch,
+  } = useGetSubDistributerQuery();
+
+  const {
+    data: bySubDistributerUser,
+    error: bySUbDistributerUserError,
+    refetch: bySubDistributerUserRefetch,
+  } = useGetBySubDistributerUserNameQuery(userInfo?.name);
+
   React.useEffect(() => {
+    bySubDistributerUserRefetch();
+    subDistributerRefetch();
+    byDistributerUserRefetch();
     refetch();
   }, []);
 
+  console.log(bySubDistributerUser, "bySubDistributerUser345234");
+
   const onSubmit = async (data) => {
     let tempResult: any;
+    let tempFormData = {
+      ...formData,
+      ...(userInfo?.role_id === "2"
+        ? {
+            manufacturer_name:
+              byDistributerUser?.["data"]?.data?.[0]?.manufacturer_name,
+            distributor_name: userInfo?.name,
+          }
+        : {}),
+      ...(userInfo?.role_id === "3"
+        ? {
+            manufacturer_name:
+              bySubDistributerUser?.["data"]?.data?.[0]?.manufacturer_name,
+            distributor_name:
+              bySubDistributerUser?.["data"]?.data?.[0]?.distributor_name,
+          }
+        : {}),
+    };
     try {
       if (data?.user_type === "Manufacturer") {
-        tempResult = await createManufact(formData);
+        tempResult = await createManufact(tempFormData);
       } else if (data?.user_type === "Distributor") {
-        tempResult = await createDistributer(formData);
+        tempResult = await createDistributer(tempFormData);
       } else if (data?.user_type === "Sub_Distributor") {
-        tempResult = await createSubDistributer(formData);
+        tempResult = await createSubDistributer(tempFormData);
       } else {
-        tempResult = await createDealer(formData);
+        tempResult = await createDealer(tempFormData);
       }
       console.log(tempResult, "result");
       if (tempResult && tempResult?.["data"]?.code === 201) {
@@ -241,10 +297,18 @@ const AddCompany = () => {
                     {...field}
                   >
                     <option>Select</option>
-                    <option value="Manufacturer">Manufacturer</option>
-                    <option value="Distributor">Distributor</option>
-                    <option value="Sub_Distributor">Sub Distributor</option>
-                    <option value="Dealer">Dealer</option>
+                    {userInfo?.role_id === "1" && (
+                      <>
+                        <option value="Manufacturer">Manufacturer</option>
+                        <option value="Distributor">Distributor</option>
+                      </>
+                    )}
+                    {userInfo?.role_id === "2" && (
+                      <>
+                        <option value="Sub_Distributor">Sub Distributor</option>
+                        <option value="Dealer">Dealer</option>
+                      </>
+                    )}
                   </CFormSelect>
                 )}
               />
@@ -255,7 +319,7 @@ const AddCompany = () => {
             {formData.user_type === "Distributor" && (
               <div className="col-sm-6 mb-3">
                 <Controller
-                  name="manufacturer_id"
+                  name="manufacturer_name"
                   control={control}
                   rules={{ required: "Type is required" }}
                   defaultValue=""
@@ -266,9 +330,12 @@ const AddCompany = () => {
                       {...field}
                     >
                       {manifactData &&
-                        manifactData?.["data"]?.data?.map((item) => {
+                        [
+                          { id: 0, manufacturer_name: "select" },
+                          ...manifactData?.["data"]?.data,
+                        ]?.map((item) => {
                           return (
-                            <option value={item?.id}>
+                            <option value={item?.manufacturer_name}>
                               {item?.manufacturer_name}
                             </option>
                           );
@@ -276,7 +343,7 @@ const AddCompany = () => {
                     </CFormSelect>
                   )}
                 />
-                {errors.manufacturer_id && (
+                {errors.manufacturer_name && (
                   <div className="text-danger">{"Field is required"}</div>
                 )}
               </div>
@@ -372,6 +439,34 @@ const AddCompany = () => {
 
             {formData.user_type === "Dealer" && (
               <>
+                <div className="col-sm-6 mb-3">
+                  <Controller
+                    name="sub_distributer_name"
+                    control={control}
+                    rules={{ required: "Type is required" }}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <CFormSelect
+                        aria-label="Default select"
+                        className="border form-control"
+                        {...field}
+                      >
+                        {subDistributerData &&
+                          [
+                            { id: 0, name: "select" },
+                            ...subDistributerData?.["data"]?.data,
+                          ]?.map((item) => {
+                            return (
+                              <option value={item?.name}>{item?.name}</option>
+                            );
+                          })}
+                      </CFormSelect>
+                    )}
+                  />
+                  {errors.sub_distributer_name && (
+                    <div className="text-danger">{"Field is required"}</div>
+                  )}
+                </div>
                 <div className="col-sm-6 mb-3">
                   <Controller
                     name="rto"

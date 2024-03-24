@@ -11,6 +11,9 @@ const Manufacturer = () => {
     refetch,
   } = useGetManufacturerQuery();
 
+  React.useEffect(() => {
+    refetch();
+  }, []);
   console.log(manifactData, "manifactDatamanifactDatamanifactData");
 
   const columns = [
@@ -39,7 +42,7 @@ const Manufacturer = () => {
   return (
     <CCard className="mb-4 pb-3 p-3">
       {manifactData && (
-        <Table column={columns} data={manifactData?.["data"]?.data} />
+        <Table column={columns} data={manifactData?.["data"]?.data} TableName={"Manufacturers"}/>
       )}
     </CCard>
   );

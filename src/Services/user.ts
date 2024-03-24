@@ -65,6 +65,15 @@ export const usersApi = createApi({
         body,
       }),
     }),
+    getByDistributerUserName: builder.query<any[], void>({
+      query: (name) => `/distributorUser/?name=${name}`,
+    }),
+    getBySubDistributerUserName: builder.query<any[], void>({
+      query: (name) => `/subDistributorUser/?name=${name}`,
+    }),
+    getByDealerUserName: builder.query<any[], void>({
+      query: (name) => `/dealerUser/?name=${name}`,
+    }),
   }),
 });
 
@@ -77,5 +86,8 @@ export const {
   useGetUserByIdQuery,
   useLoginUsersMutation,
   useRegisterUserMutation,
+  useGetByDistributerUserNameQuery,
+  useGetBySubDistributerUserNameQuery,
+  useGetByDealerUserNameQuery,
 } = usersApi;
 export const { endpoints } = usersApi;

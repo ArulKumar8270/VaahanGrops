@@ -2,12 +2,14 @@
 
 .mainLogin {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   min-height: 100vh;
-  background: url("https://images.alphacoders.com/135/1350899.png") no-repeat;
+  background: url("https://polymertape.com/cdn/shop/articles/truck1.jpg?v=1606160718&width=1100")
+    no-repeat;
   background-position: center;
   background-size: cover;
+  padding-left: 8%;
 }
 
 .wrapperlogin {
